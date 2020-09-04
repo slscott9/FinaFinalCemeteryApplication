@@ -11,8 +11,8 @@ data class Cemetery(
 //    @ColumnInfo(name = "row_number")
 //    val id: Int = 100,
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey(autoGenerate = false)
+    val cemeteryRowId: Int = 100,
 
     val cemeteryName: String,
 
@@ -38,8 +38,8 @@ data class Cemetery(
 @Entity(tableName = "final_graves_table")
 data class Grave(
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey(autoGenerate = false)
+    val graveRowId: Int,
 
     val cemeteryId: Int,
 

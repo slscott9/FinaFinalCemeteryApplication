@@ -90,7 +90,7 @@ class CreateGraveActivity : AppCompatActivity(), View.OnClickListener {
             }else{
                 val grave =
                     Grave(
-                        id = graveId!!,                                      //problems with autogenerate
+                        graveRowId = graveId!!,                                      //problems with autogenerate
                         firstName = binding.firstNameEt.text.toString(),
                         lastName = binding.lastNameet.text.toString(),
                         birthDate = binding.bornEt.text.toString(),

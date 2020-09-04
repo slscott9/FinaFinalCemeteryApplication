@@ -15,6 +15,12 @@ class CemeteryListViewModel(application: Application, private val repository: Ce
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    init {
+        viewModelScope.launch {
+            repository.refreshVideos() // view model created get all cems from network insert into database
+        }
+    }
+
 
     private val _allCemeteries = repository.getAllCemeteries()
     val allCemeteries: LiveData<List<Cemetery>> = _allCemeteries

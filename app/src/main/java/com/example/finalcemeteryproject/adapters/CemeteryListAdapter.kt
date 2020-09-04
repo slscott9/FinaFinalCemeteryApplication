@@ -2,7 +2,6 @@ package com.example.finalcemeteryproject.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -39,13 +38,13 @@ class CemeteryListAdapter(val clickListner: CemeteryListener): ListAdapter<Cemet
 
 class CemeteryListener(val clickListener: (id: Int) -> Unit){
     fun onClick(cemetery: Cemetery){
-        clickListener(cemetery.id)
+        clickListener(cemetery.cemeteryRowId)
     }
 }
 
 class CemeteryDiffUtilCallback: DiffUtil.ItemCallback<Cemetery>() {
     override fun areItemsTheSame(oldItem: Cemetery, newItem: Cemetery): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.cemeteryRowId == newItem.cemeteryRowId
     }
 
     override fun areContentsTheSame(oldItem: Cemetery, newItem: Cemetery): Boolean {

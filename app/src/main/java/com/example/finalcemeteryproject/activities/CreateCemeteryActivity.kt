@@ -15,7 +15,6 @@ import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.finalcemeteryproject.R
@@ -98,26 +97,26 @@ class CreateCemeteryActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please entery all fields", Toast.LENGTH_SHORT).show()
             } else {
 
-                val name = binding.nameEditText.text.toString()
-                val location = binding.locationEditText.text.toString()
-                val state = binding.stateEditText.text.toString()
-                val county = binding.countyEditText.text.toString()
-                val townShip = binding.townshipEditText.text.toString()
-                val range = binding.rangeEditText.text.toString()
-                val section = binding.sectionEditText.text.toString()
-                val spot = binding.spotEditText.text.toString()
-                val firstYear = binding.firstYearEditText.text.toString()
+                val name = binding.nameEditText.text
+                val location = binding.locationEditText.text
+                val state = binding.stateEditText.text
+                val county = binding.countyEditText.text
+                val townShip = binding.townshipEditText.text
+                val range = binding.rangeEditText.text
+                val section = binding.sectionEditText.text
+                val spot = binding.spotEditText.text
+                val firstYear = binding.firstYearEditText.text
                 val cemetery =
                     Cemetery(
-                        cemeteryName = name,
-                        cemeteryLocation = location,
-                        cemeteryState = state,
-                        cemeteryCounty = county,
-                        township = townShip,
-                        range = range,
-                        section = section,
-                        spot = spot,
-                        firstYear = firstYear
+                        cemeteryName = name.toString(),
+                        cemeteryLocation = location.toString(),
+                        cemeteryState = state.toString(),
+                        cemeteryCounty = county.toString(),
+                        township = townShip.toString(),
+                        range = range.toString(),
+                        section = section.toString(),
+                        spot = spot.toString(),
+                        firstYear = firstYear.toString()
                     )
                 createCemeteryViewModel.insertNewCemetery(cemetery)
                 finish()

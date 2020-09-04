@@ -65,9 +65,6 @@ class CemeteryListActivity : AppCompatActivity() {
 
 //        cemeteryListViewModel.insertCemetery(cemetery1)
 
-
-
-
     }
 
     private fun initViewModel(){

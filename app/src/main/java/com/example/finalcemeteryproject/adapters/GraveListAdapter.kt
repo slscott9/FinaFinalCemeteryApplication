@@ -33,7 +33,7 @@ class GraveListAdapter(val clickListener: GraveListListener) : ListAdapter<Grave
 
 class GraveDiffUtilCallback: DiffUtil.ItemCallback<Grave>(){
     override fun areItemsTheSame(oldItem: Grave, newItem: Grave): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.graveRowId == newItem.graveRowId
     }
 
     override fun areContentsTheSame(oldItem: Grave, newItem: Grave): Boolean {
@@ -42,6 +42,6 @@ class GraveDiffUtilCallback: DiffUtil.ItemCallback<Grave>(){
 }
 class GraveListListener(val clickListener: (id: Int) -> Unit) {
     fun onClick(grave: Grave) {
-        clickListener(grave.id)
+        clickListener(grave.graveRowId)
     }
 }

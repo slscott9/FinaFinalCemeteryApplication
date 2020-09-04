@@ -79,7 +79,7 @@ class GraveDetailActivity : AppCompatActivity() {
 
         binding.editChip.setOnClickListener {
             val intent = Intent(this, CreateGraveActivity::class.java)
-            intent.putExtra(CreateGraveActivity.GRAVE_ROW_ID, grave.id
+            intent.putExtra(CreateGraveActivity.GRAVE_ROW_ID, grave.graveRowId
             )
             intent.putExtra(CreateGraveActivity.EDIT_GRAVE, true)
             startActivity(intent)

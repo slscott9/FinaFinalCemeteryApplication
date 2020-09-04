@@ -16,16 +16,21 @@ interface CemeteryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGrave(grave: Grave)
 
-    @Query("delete from final_graves_table where id= :rowId")
+    @Query("delete from final_graves_table where graveRowId= :rowId")
     suspend fun deleteGrave(rowId: Int)
 
-    @Query("select * from final_graves_table where id=  :rowId")
+    @Query("select * from final_graves_table where graveRowId=  :rowId")
     fun getGraveWithRowid(rowId: Int): LiveData<Grave>
 
-    @Query("select * from final_cemetery_table where id= :cemeteryId")
+    @Query("select * from final_cemetery_table where cemeteryRowId= :cemeteryId")
      fun getCemeteryWithId(cemeteryId: Int): LiveData<Cemetery>
 
 
     @Query("select * from final_graves_table where cemeteryId= :cemeteryId")
     fun getGravesWithCemeteryId(cemeteryId: Int) : LiveData<List<Grave>>
+
+
+    //Network
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCemeteryNetworkList(vararg cemeteryNetworkList: Cemetery)
 }
