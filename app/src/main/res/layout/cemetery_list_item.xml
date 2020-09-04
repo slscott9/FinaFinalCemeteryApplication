@@ -3,8 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="cemetery"
+            type="com.example.finalcemeteryproject.data.Cemetery" />
+
+        <variable
+            name="clickListener"
+            type="com.example.finalcemeteryproject.adapters.CemeteryListener" />
+    </data>
+
 
     <androidx.cardview.widget.CardView
+        android:onClick="@{() -> clickListener.onClick(cemetery)}"
         android:layout_width="match_parent"
         android:layout_height="100dp">
 
@@ -16,6 +27,7 @@
 
             <TextView
                 android:id="@+id/tvCemeteryListName"
+                app:setCemeteryName="@{cemetery}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -26,6 +38,7 @@
 
             <TextView
                 android:id="@+id/cemeteryListLocation"
+                app:setCemeteryLocation="@{cemetery}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

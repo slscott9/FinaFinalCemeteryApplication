@@ -7,9 +7,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "final_cemetery_table")
 data class Cemetery(
-    @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "row_number")
-    val id: Int = 100,
+//    @PrimaryKey(autoGenerate = false) //for when we receive cemeteries from the network
+//    @ColumnInfo(name = "row_number")
+//    val id: Int = 100,
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
 
     val cemeteryName: String,
 
@@ -35,8 +38,8 @@ data class Cemetery(
 @Entity(tableName = "final_graves_table")
 data class Grave(
 
-    @PrimaryKey(autoGenerate = false)
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
 
     val cemeteryId: Int,
 

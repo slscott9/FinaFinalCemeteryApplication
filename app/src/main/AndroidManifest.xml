@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalcemeteryproject">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.CemeteryListActivity">
-
+        <activity android:name=".activities.CreateGraveActivity"
+            android:label="Create Grave Activity"/>
+        <activity android:name=".activities.CreateCemeteryActivity"
+            android:label="Create Cemetery Activity"/>
+        <activity android:name=".activities.GraveDetailActivity"
+            android:label="Grave Detail Activity"/>
+        <activity android:name=".activities.CemeteryListActivity"
+            android:label="Cemetery List Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CemeteryDetailActivity" />
+        <activity android:name=".activities.CemeteryDetailActivity"
+            android:label="Cemetery Detail activity"/>
     </application>
 
 </manifest>
