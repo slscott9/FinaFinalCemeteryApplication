@@ -1,6 +1,7 @@
 package com.example.finalcemeteryproject.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.finalcemeteryproject.network.NetworkApi
 import com.example.finalcemeteryproject.network.ServiceBuilder
 import com.example.finalcemeteryproject.network.asDatabaseModel
@@ -12,6 +13,7 @@ import retrofit2.Response
 class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
 
 
+    val retrofit = ServiceBuilder.networkAccessor
 
     fun getAllCemeteries() : LiveData<List<Cemetery>> {
         return cemeteryDao.getAllCemeteries()
@@ -42,12 +44,72 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
         return cemeteryDao.getGravesWithCemeteryId(cemeteryId)
     }
 
+     suspend fun getMaxCemeteryRowNum() : Int? {
+       return  cemeteryDao.getMaxCemeteryRowNum()
+    }
+
 
     //network calls
+//
+//    fun sendNewCemeteryToNetwork(cemetery: Cemetery, onResult: (Cemetery?) -> Unit){
+//        val retrofit = ServiceBuilder.buildService(NetworkApi::class.java)
+//        retrofit.sendNewCemeteryToNetwork(
+//            cemId = cemetery.cemeteryRowId.toString(),
+//            cemName = cemetery.cemeteryName,
+//            location = cemetery.cemeteryLocation,
+//            county = cemetery.cemeteryCounty,
+//            township = cemetery.township,
+//            range = cemetery.range,
+//            spot = cemetery.spot,
+//            yearFounded = cemetery.firstYear,
+//            section = cemetery.section,
+//            state = cemetery.cemeteryState).enqueue(
+//
+//            object : retrofit2.Callback<Cemetery> {
+//                override fun onFailure(call: Call<Cemetery>, t: Throwable) {
+//                    onResult(null)
+//                }
+//                override fun onResponse(call: Call<Cemetery>, response: Response<Cemetery>) {
+//                    val addedCemetery = response.body()
+//                    onResult(addedCemetery)
+//                }
+//            }
+//        )
+//    }
 
-    fun sendNewCemeteryToNetwork(cemetery: Cemetery, onResult: (Cemetery?) -> Unit){
-        val retrofit = ServiceBuilder.buildService(NetworkApi::class.java)
-        retrofit.sendNewCemeteryToNetwork(
+//
+//    fun sendNewGraveToNetwork(grave: Grave, onResult: (Grave?) -> Unit){
+//        val retrofit = ServiceBuilder.buildService(NetworkApi::class.java)
+//        retrofit.sendNewGraveToNetwork(
+//            id = grave.graveRowId,
+//            cemeteryId = grave.cemeteryId,
+//            firstName = grave.firstName,
+//            lastName = grave.lastName,
+//            bornDate = grave.birthDate,
+//            deathDate = grave.deathDate,
+//            marriageYear = grave.marriageYear,
+//            comment = grave.comment,
+//            graveNum = grave.graveNumber
+//        ).enqueue(
+//
+//            object : retrofit2.Callback<Grave> {
+//                override fun onFailure(call: Call<Grave>, t: Throwable) {
+//                    onResult(null)
+//                }
+//                override fun onResponse(call: Call<Grave>, response: Response<Grave>) {
+//                    val addedGrave = response.body()
+//                    onResult(addedGrave)
+//                }
+//            }
+//        )
+//    }
+
+
+
+    // new ways
+
+    suspend fun newWaySendCemeteryToNetwork(cemetery: Cemetery){ //need to send this as a json object to dad
+        retrofit.sendNewCemeteryToNetworkNewWay(
             cemId = cemetery.cemeteryRowId.toString(),
             cemName = cemetery.cemeteryName,
             location = cemetery.cemeteryLocation,
@@ -57,53 +119,18 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
             spot = cemetery.spot,
             yearFounded = cemetery.firstYear,
             section = cemetery.section,
-            state = cemetery.cemeteryState).enqueue(
-
-            object : retrofit2.Callback<Cemetery> {
-                override fun onFailure(call: Call<Cemetery>, t: Throwable) {
-                    onResult(null)
-                }
-                override fun onResponse(call: Call<Cemetery>, response: Response<Cemetery>) {
-                    val addedCemetery = response.body()
-                    onResult(addedCemetery)
-                }
-            }
+            state = cemetery.cemeteryState
         )
     }
 
 
-    fun sendNewGraveToNetwork(grave: Grave, onResult: (Grave?) -> Unit){
-        val retrofit = ServiceBuilder.buildService(NetworkApi::class.java)
-        retrofit.sendNewGraveToNetwork(
-            id = grave.graveRowId,
-            cemeteryId = grave.cemeteryId,
-            firstName = grave.firstName,
-            lastName = grave.lastName,
-            bornDate = grave.birthDate,
-            deathDate = grave.deathDate,
-            marriageYear = grave.marriageYear,
-            comment = grave.comment,
-            graveNum = grave.graveNumber
-        ).enqueue(
 
-            object : retrofit2.Callback<Grave> {
-                override fun onFailure(call: Call<Grave>, t: Throwable) {
-                    onResult(null)
-                }
-                override fun onResponse(call: Call<Grave>, response: Response<Grave>) {
-                    val addedGrave = response.body()
-                    onResult(addedGrave)
-                }
-            }
-        )
-    }
 
-    //Call from ViewModel in coroutine launch
+    //new way to get cemeteries from network
 
     suspend fun refreshVideos() {
         withContext(Dispatchers.IO) {
-            val retrofit = ServiceBuilder.buildService(NetworkApi::class.java)
-            val cemeteryNetworkList = retrofit.getCemeteriesFromNetwork().await()
+            val cemeteryNetworkList = retrofit.getCemeteriesFromNetworkNewWay()
             cemeteryDao.insertCemeteryNetworkList(*cemeteryNetworkList.asDatabaseModel())
         }
     }

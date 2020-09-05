@@ -10,18 +10,26 @@ import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface NetworkApi {
 
     @GET("/cgi-bin/getCems.pl")
     fun getCemeteriesFromNetwork(): Deferred<NetworkCemeteryContainer>
 
+    /*
+        So the magic now is that you can create suspend methods in your Retrofit interface and directly return your data object.
+     */
+
+    @GET("/cgi-bin/getCems.pl")
+    suspend fun getCemeteriesFromNetworkNewWay(): NetworkCemeteryContainer      //new way mark as suspend get your container object no more deferred
+
+
+
+
+
     @FormUrlEncoded
-    @POST("/cgi-bin/addCem.pl")
+    @POST("/cgi-bin/addCem.pl")                  //old way
     fun sendNewCemeteryToNetwork(
         @Field("cem_id") cemId: String,
         @Field("name") cemName: String,
@@ -34,6 +42,30 @@ interface NetworkApi {
         @Field("fyear") yearFounded: String,
         @Field("section") section: String
     ): Call<Cemetery>
+
+
+    @FormUrlEncoded
+@POST("/cgi-bin/addCem.pl")                 // new way mark as suspend return your Cemetery
+    suspend fun sendNewCemeteryToNetworkNewWay(
+        @Field("cem_id") cemId: String,
+        @Field("name") cemName: String,
+        @Field("loc") location: String,
+        @Field("state") state: String,
+        @Field("county") county: String,
+        @Field("twnsp") township: String,
+        @Field("range") range: String,
+        @Field("spot") spot: String,
+        @Field("fyear") yearFounded: String,
+        @Field("section") section: String
+    ): Cemetery
+
+
+
+
+
+
+
+
 
     @FormUrlEncoded
     @POST("/cgi-bin/addGrave.pl")
@@ -60,20 +92,18 @@ object ServiceBuilder {
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://dts.scott.net")
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .client(client)
         .build()
-
 
 
     //MoshiConverterFactory.create(moshi) if we are to use moshi converter this needs
     //to be in .addConverterFactory
 
-    fun<T> buildService(service: Class<T>): T{
-        return retrofit.create(service)
-    }
+//    fun<T> buildService(service: Class<T>): T{
+//        return retrofit.create(service)
+//    }
 
-//    val networkAccessor = retrofit.create(   this will be for a get request?
-//        RestApi::class.java)
+    val networkAccessor = retrofit.create(
+        NetworkApi::class.java)
 }
 

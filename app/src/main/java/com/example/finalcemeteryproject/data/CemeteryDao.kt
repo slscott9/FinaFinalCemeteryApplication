@@ -1,6 +1,7 @@
 package com.example.finalcemeteryproject.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import java.sql.RowId
 
@@ -33,4 +34,7 @@ interface CemeteryDao {
     //Network
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCemeteryNetworkList(vararg cemeteryNetworkList: Cemetery)
+
+    @Query("select max(cemeteryRowId) from final_cemetery_table")
+     suspend fun getMaxCemeteryRowNum(): Int?
 }

@@ -30,3 +30,5 @@ class CemeteryDetailViewModel(application: Application, repository: CemeteryRepo
         viewModelJob.cancel()
     }
 }
+
+

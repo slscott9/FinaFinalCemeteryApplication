@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -50,6 +51,8 @@ class CreateCemeteryActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this) //Use its methods to get location updates
         locationRequest = LocationRequest()    //can also use this to get finer location
         geocoder = Geocoder(this, Locale.getDefault()) //gets lat and long into usable address objects
+
+
 
 
         binding.locationBtn.setOnClickListener {
@@ -108,6 +111,7 @@ class CreateCemeteryActivity : AppCompatActivity() {
                 val firstYear = binding.firstYearEditText.text
                 val cemetery =
                     Cemetery(
+                        cemeteryRowId = createCemeteryViewModel.newCemeteryKey!! ,
                         cemeteryName = name.toString(),
                         cemeteryLocation = location.toString(),
                         cemeteryState = state.toString(),
@@ -118,7 +122,10 @@ class CreateCemeteryActivity : AppCompatActivity() {
                         spot = spot.toString(),
                         firstYear = firstYear.toString()
                     )
+                Log.i("CreateCemeteryViewModel", "The cemeteryKey incremented is ${createCemeteryViewModel.newCemeteryKey}")
+
                 createCemeteryViewModel.insertNewCemetery(cemetery)
+                createCemeteryViewModel.sendNeCemeteryToNetwork(cemetery)
                 finish()
             }
         }
