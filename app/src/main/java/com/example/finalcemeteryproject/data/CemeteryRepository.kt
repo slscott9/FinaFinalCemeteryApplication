@@ -106,9 +106,24 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
 
 
 
-    // new ways
+    // new ways this may not work probably use the old way and in view model you can use the callback to set a toast message that is live data dependant
 
-    suspend fun newWaySendCemeteryToNetwork(cemetery: Cemetery){ //need to send this as a json object to dad
+//    suspend fun newWaySendCemeteryToNetwork(cemetery: Cemetery){ //need to send this as a json object to dad
+//        retrofit.sendNewCemeteryToNetworkNewWay(
+//            cemId = cemetery.cemeteryRowId.toString(),
+//            cemName = cemetery.cemeteryName,
+//            location = cemetery.cemeteryLocation,
+//            county = cemetery.cemeteryCounty,
+//            township = cemetery.township,
+//            range = cemetery.range,
+//            spot = cemetery.spot,
+//            yearFounded = cemetery.firstYear,
+//            section = cemetery.section,
+//            state = cemetery.cemeteryState
+//        )
+//    }
+
+     fun newWaySendCemeteryToNetwork(cemetery: Cemetery, onResult: (Cemetery?) -> Unit){ //need to send this as a json object to dad
         retrofit.sendNewCemeteryToNetworkNewWay(
             cemId = cemetery.cemeteryRowId.toString(),
             cemName = cemetery.cemeteryName,
@@ -118,8 +133,17 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
             range = cemetery.range,
             spot = cemetery.spot,
             yearFounded = cemetery.firstYear,
-            section = cemetery.section,
             state = cemetery.cemeteryState
+        ).enqueue(
+            object : retrofit2.Callback<Cemetery> {
+                override fun onFailure(call: Call<Cemetery>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<Cemetery>, response: Response<Cemetery>) {
+                    val addedCemetery = response.body()
+                    onResult(addedCemetery)
+                }
+            }
         )
     }
 
@@ -131,6 +155,7 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
     suspend fun refreshVideos() {
         withContext(Dispatchers.IO) {
             val cemeteryNetworkList = retrofit.getCemeteriesFromNetworkNewWay()
+
             cemeteryDao.insertCemeteryNetworkList(*cemeteryNetworkList.asDatabaseModel())
         }
     }

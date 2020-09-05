@@ -15,35 +15,44 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope( Dispatchers.Main + viewModelJob )
 
-
-
-
-        var newCemeteryKey: Int? = null
+        var newCemeteryKey: Int = 0
 
          init {
              viewModelScope.launch {
-                 newCemeteryKey = repository.getMaxCemeteryRowNum() ?: 0 //needs to be in couroutine launch
+                 val tempMax = repository.getMaxCemeteryRowNum()
+                 newCemeteryKey = tempMax  ?: 0 //if max row num is null (database is empty) then max is 0
+                 newCemeteryKey += 1  //if max is not null it equal highest row number add 1 for the next insert to be correct
+
+
+                 Log.i("CreateViewModel", "Init cemetery key is $newCemeteryKey")
+
+
              }
 
          }
 
+    fun sendNeCemeteryToNetwork(cemetery: Cemetery){
+        viewModelScope.launch {
+            repository.newWaySendCemeteryToNetwork(cemetery){
+                _responseFailure.value = it == null
+            }
+        }
+    }
 
-
-
+    private val _responseFailure = MutableLiveData<Boolean>()
+    val responseFailure: LiveData<String> = Transformations.map(_responseFailure){
+        if(it) "Successfully sent cemetery to network" else "Failed to send cemetery to network"
+    }
 
     fun insertNewCemetery(cemetery: Cemetery){
         viewModelScope.launch {
-            newCemeteryKey = newCemeteryKey?.plus(1)
-            Log.i("CreateViewModel", "the new cemetery key is $newCemeteryKey")
+            newCemeteryKey += 1
+            Log.i("CreateViewModel", "the new cemetery key incrememented when inserted is $newCemeteryKey")
             repository.insertCemetery(cemetery)
         }
     }
 
-    fun sendNeCemeteryToNetwork(cemetery: Cemetery){
-        viewModelScope.launch {
-            repository.newWaySendCemeteryToNetwork(cemetery)
-        }
-    }
+
 
 
 

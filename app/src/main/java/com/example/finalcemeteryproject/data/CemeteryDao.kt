@@ -11,7 +11,7 @@ interface CemeteryDao {
     @Query("select * from final_cemetery_table")
     fun getAllCemeteries(): LiveData<List<Cemetery>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCemetery(cemetery: Cemetery)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

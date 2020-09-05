@@ -53,7 +53,11 @@ class CreateCemeteryActivity : AppCompatActivity() {
         geocoder = Geocoder(this, Locale.getDefault()) //gets lat and long into usable address objects
 
 
-
+        createCemeteryViewModel.responseFailure.observe(this, androidx.lifecycle.Observer {
+            it?.let {
+                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         binding.locationBtn.setOnClickListener {
             if (!isLocationEnabled()) {
@@ -111,7 +115,7 @@ class CreateCemeteryActivity : AppCompatActivity() {
                 val firstYear = binding.firstYearEditText.text
                 val cemetery =
                     Cemetery(
-                        cemeteryRowId = createCemeteryViewModel.newCemeteryKey!! ,
+                        cemeteryRowId = createCemeteryViewModel.newCemeteryKey ,
                         cemeteryName = name.toString(),
                         cemeteryLocation = location.toString(),
                         cemeteryState = state.toString(),
