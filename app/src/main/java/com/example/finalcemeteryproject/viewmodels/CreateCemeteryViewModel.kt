@@ -26,9 +26,7 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
 
                  Log.i("CreateViewModel", "Init cemetery key is $newCemeteryKey")
 
-
              }
-
          }
 
     fun sendNeCemeteryToNetwork(cemetery: Cemetery){

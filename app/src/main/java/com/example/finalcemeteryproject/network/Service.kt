@@ -23,7 +23,7 @@ interface NetworkApi {
      */
 
     @GET("/cgi-bin/getCems.pl")
-    suspend fun getCemeteriesFromNetworkNewWay(): NetworkCemeteryContainer     //new way mark as suspend get your container object no more deferred
+     fun getCemeteriesFromNetworkNewWay(): Call<NetworkCemeteryContainer>     //new way mark as suspend get your container object no more deferred
     //Use Response<NetworkCemeteryContainer> in order to get a response back and use it to display information about request
 
 

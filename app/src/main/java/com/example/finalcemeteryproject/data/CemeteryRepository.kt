@@ -2,9 +2,7 @@ package com.example.finalcemeteryproject.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.finalcemeteryproject.network.NetworkApi
-import com.example.finalcemeteryproject.network.ServiceBuilder
-import com.example.finalcemeteryproject.network.asDatabaseModel
+import com.example.finalcemeteryproject.network.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -148,15 +146,31 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
     }
 
 
-
-
     //new way to get cemeteries from network
 
-    suspend fun refreshVideos() {
-        withContext(Dispatchers.IO) {
-            val cemeteryNetworkList = retrofit.getCemeteriesFromNetworkNewWay()
+    fun refreshVideos(onResult: (NetworkCemeteryContainer?) -> Unit) {
 
-            cemeteryDao.insertCemeteryNetworkList(*cemeteryNetworkList.asDatabaseModel())
-        }
+        val cemeteryNetworkList = retrofit.getCemeteriesFromNetworkNewWay()
+
+        cemeteryNetworkList.enqueue(
+            object : retrofit2.Callback<NetworkCemeteryContainer> {
+                override fun onFailure(call: Call<NetworkCemeteryContainer>, t: Throwable) {
+                    onResult(null)
+                }
+
+                override fun onResponse(
+                    call: Call<NetworkCemeteryContainer>,
+                    response: Response<NetworkCemeteryContainer>
+                ) {
+                    val networkCemeteryContainer = response.body()
+                    onResult(networkCemeteryContainer)
+                }
+            }
+        )
+    }
+
+
+    suspend fun insertNetworkCems(cemetery: NetworkCemeteryContainer){
+        cemeteryDao.insertCemeteryNetworkList(*cemetery.asDatabaseModel())
     }
 }

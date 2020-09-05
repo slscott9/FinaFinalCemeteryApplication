@@ -3,6 +3,7 @@ package com.example.finalcemeteryproject.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +34,12 @@ class CemeteryListActivity : AppCompatActivity() {
             val intent = Intent(this, CemeteryDetailActivity::class.java)
             intent.putExtra(CemeteryDetailActivity.CEMETERY_ID, it)
             startActivity(intent)
+        })
+
+        cemeteryListViewModel.responseFailure.observe(this, Observer {
+            it?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
         })
 
         cemeteryListViewModel.allCemeteries.observe(this, Observer {

@@ -1,8 +1,11 @@
 package com.example.finalcemeteryproject.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.example.finalcemeteryproject.data.Cemetery
 import com.example.finalcemeteryproject.data.CemeteryRepository
 import kotlinx.coroutines.CoroutineScope
@@ -16,9 +19,28 @@ class CemeteryListViewModel(application: Application, private val repository: Ce
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     init {
-        viewModelScope.launch {
-            repository.refreshVideos() // view model created get all cems from network insert into database
-        }
+        refreshVideos()
+    }
+
+    fun refreshVideos(){
+            repository.refreshVideos(){
+                if(it == null){
+                    _responseFailure.value = false //onFailure to get cemetery list set the failure message and toast in activitty
+                }else{
+                    viewModelScope.launch {
+                        repository.insertNetworkCems(it) //onSucess insert the cemteries into database
+                        Log.i("CemeteryListViewModel", "List received and inserted into database")
+
+                    }
+                }
+            } // view model created get all cems from network insert into database
+
+    }
+
+
+    private val _responseFailure = MutableLiveData<Boolean>()
+    val responseFailure: LiveData<String> = Transformations.map(_responseFailure){
+        if(it) "Successfully got cemeteries from network" else "Failed to get cemeteries from network"
     }
 
 
