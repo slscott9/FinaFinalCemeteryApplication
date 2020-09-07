@@ -15,16 +15,20 @@ import retrofit2.http.*
 
 interface NetworkApi {
 
+//    @GET("/cgi-bin/getCems.pl")
+//    fun getCemeteriesFromNetwork(): Deferred<NetworkCemeteryContainer>
+
+
     @GET("/cgi-bin/getCems.pl")
-    fun getCemeteriesFromNetwork(): Deferred<NetworkCemeteryContainer>
+     fun getCemeteriesFromNetworkNewWay(): Call<NetworkCemeteryContainer>
 
     /*
         So the magic now is that you can create suspend methods in your Retrofit interface and directly return your data object.
      */
 
-    @GET("/cgi-bin/getCems.pl")
-     fun getCemeteriesFromNetworkNewWay(): Call<NetworkCemeteryContainer>     //new way mark as suspend get your container object no more deferred
-    //Use Response<NetworkCemeteryContainer> in order to get a response back and use it to display information about request
+//    @GET("/cgi-bin/getCems.pl")
+//     fun getCemeteriesFromNetworkNewWay(): Call<NetworkCemeteryContainer>     //new way mark as suspend get your container object no more deferred
+//    //Use Response<NetworkCemeteryContainer> in order to get a response back and use it to display information about request
 
 
 

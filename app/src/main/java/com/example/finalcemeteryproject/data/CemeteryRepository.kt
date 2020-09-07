@@ -1,12 +1,16 @@
 package com.example.finalcemeteryproject.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.finalcemeteryproject.network.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
+import timber.log.Timber
 
 class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
 
@@ -146,9 +150,8 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
     }
 
 
-    //new way to get cemeteries from network
 
-    fun refreshVideos(onResult: (NetworkCemeteryContainer?) -> Unit) {
+    fun refreshCemeteryList(onResult: (NetworkCemeteryContainer?) -> Unit) {
 
         val cemeteryNetworkList = retrofit.getCemeteriesFromNetworkNewWay()
 
@@ -164,13 +167,24 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
                 ) {
                     val networkCemeteryContainer = response.body()
                     onResult(networkCemeteryContainer)
+
                 }
             }
         )
     }
 
 
+
     suspend fun insertNetworkCems(cemetery: NetworkCemeteryContainer){
+        Timber.d("inserting")
+        Log.i("Doing work in view model", "work")
+
         cemeteryDao.insertCemeteryNetworkList(*cemetery.asDatabaseModel())
     }
+
+
+
+
+
+
 }

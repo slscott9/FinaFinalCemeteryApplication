@@ -19,17 +19,21 @@ class CemeteryListViewModel(application: Application, private val repository: Ce
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     init {
-        refreshVideos()
+//        refreshVideos()
     }
 
+    /*
+        The callback with enqueue signals when a failure or a reponse  happened implementing the callback with a lambda
+        Allows for completing actions based on a failure or a response
+     */
     fun refreshVideos(){
-            repository.refreshVideos(){
+            repository.refreshCemeteryList(){
                 if(it == null){
-                    _responseFailure.value = false //onFailure to get cemetery list set the failure message and toast in activitty
+                    _responseFailure.value = false //if the response failed set the error message
                 }else{
                     viewModelScope.launch {
-                        repository.insertNetworkCems(it) //onSucess insert the cemteries into database
-                        Log.i("CemeteryListViewModel", "List received and inserted into database")
+                        repository.insertNetworkCems(it) //if the reponse is good insert into database
+                        Log.i("Doing work in view model", "work")
 
                     }
                 }
@@ -43,11 +47,9 @@ class CemeteryListViewModel(application: Application, private val repository: Ce
         if(it) "Successfully got cemeteries from network" else "Failed to get cemeteries from network"
     }
 
-
     private val _allCemeteries = repository.getAllCemeteries()
     val allCemeteries: LiveData<List<Cemetery>> = _allCemeteries
 
-    
     fun insertCemetery(cemetery: Cemetery){
         viewModelScope.launch {
             repository.insertCemetery(cemetery)

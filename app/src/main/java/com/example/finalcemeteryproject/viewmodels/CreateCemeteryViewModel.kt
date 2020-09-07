@@ -10,6 +10,7 @@ import com.example.finalcemeteryproject.data.Cemetery
 import com.example.finalcemeteryproject.data.CemeteryRepository
 import kotlinx.coroutines.*
 
+
 class CreateCemeteryViewModel(application: Application, val repository: CemeteryRepository) : AndroidViewModel(application){
 
     private val viewModelJob = Job()
@@ -23,9 +24,7 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
                  newCemeteryKey = tempMax  ?: 0 //if max row num is null (database is empty) then max is 0
                  newCemeteryKey += 1  //if max is not null it equal highest row number add 1 for the next insert to be correct
 
-
                  Log.i("CreateViewModel", "Init cemetery key is $newCemeteryKey")
-
              }
          }
 
@@ -42,6 +41,7 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
         if(it) "Successfully sent cemetery to network" else "Failed to send cemetery to network"
     }
 
+
     fun insertNewCemetery(cemetery: Cemetery){
         viewModelScope.launch {
             newCemeteryKey += 1
@@ -51,8 +51,4 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
     }
 
 
-
-
-
-    ///need internet connection
 }

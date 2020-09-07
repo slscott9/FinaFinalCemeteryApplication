@@ -55,7 +55,7 @@ class CreateCemeteryActivity : AppCompatActivity() {
 
         createCemeteryViewModel.responseFailure.observe(this, androidx.lifecycle.Observer {
             it?.let {
-                Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         })
 
