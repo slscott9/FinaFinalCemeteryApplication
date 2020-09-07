@@ -12,6 +12,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
+/*
+    WorkRequest defines how and when the work should run
+ */
 class CemeteryApplication: Application() { //run doWork for specified Periodic work
 
     val applicationScope = CoroutineScope(Dispatchers.Default)
@@ -32,7 +35,7 @@ class CemeteryApplication: Application() { //run doWork for specified Periodic w
             .setRequiresCharging(true)
             .build()
 
-        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(15, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 

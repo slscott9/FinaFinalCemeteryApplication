@@ -21,10 +21,9 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
          init {
              viewModelScope.launch {
                  val tempMax = repository.getMaxCemeteryRowNum()
-                 newCemeteryKey = tempMax  ?: 0 //if max row num is null (database is empty) then max is 0
-                 newCemeteryKey += 1  //if max is not null it equal highest row number add 1 for the next insert to be correct
+                 newCemeteryKey = tempMax  ?: 0                          //if max row num is null (database is empty) then max is 0
+                 newCemeteryKey += 1                                      //if max is not null it equal highest row number add 1 for the next insert to be correct
 
-                 Log.i("CreateViewModel", "Init cemetery key is $newCemeteryKey")
              }
          }
 
@@ -45,7 +44,6 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
     fun insertNewCemetery(cemetery: Cemetery){
         viewModelScope.launch {
             newCemeteryKey += 1
-            Log.i("CreateViewModel", "the new cemetery key incrememented when inserted is $newCemeteryKey")
             repository.insertCemetery(cemetery)
         }
     }

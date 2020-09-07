@@ -36,13 +36,13 @@ class CemeteryListActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
-        cemeteryListViewModel.responseFailure.observe(this, Observer {
+        cemeteryListViewModel.networkCemeteryListFailure.observe(this, Observer {
             it?.let {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show() //if getting cemeteries failed we display the error message
             }
         })
 
-        cemeteryListViewModel.allCemeteries.observe(this, Observer {
+        cemeteryListViewModel.cemeteryList.observe(this, Observer {
             it?.let {
                 cemeteryListAdapter.submitList(it)
             }

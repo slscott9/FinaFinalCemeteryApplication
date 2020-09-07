@@ -16,7 +16,7 @@ import timber.log.Timber
 
 
 /*
-    Define do work runs
+    Worker defines what the work does
  */
 class RefreshDataWorker(appContext: Context,  params: WorkerParameters): CoroutineWorker(appContext, params) {
 
@@ -33,22 +33,13 @@ class RefreshDataWorker(appContext: Context,  params: WorkerParameters): Corouti
         val repository = CemeteryRepository(cemeteryDatabase)
 
         try{
-            repository.refreshCemeteryList {
-                if (it != null) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        repository.insertNetworkCems(it)
-
-                    }
-                }
-            }
+           repository.refreshCemeteryList()
             Timber.d("Work request for sync is run")
 
         }catch (e: HttpException){
-            return Result.retry()
+            return Result.retry() //Work is enqueued again enqueue -> running -> success
         }
         return Result.success()
-
-
 
     }
 

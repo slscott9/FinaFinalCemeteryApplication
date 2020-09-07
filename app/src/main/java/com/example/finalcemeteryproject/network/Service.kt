@@ -20,7 +20,7 @@ interface NetworkApi {
 
 
     @GET("/cgi-bin/getCems.pl")
-     fun getCemeteriesFromNetworkNewWay(): Call<NetworkCemeteryContainer>
+     suspend fun getCemeteriesFromNetworkNewWay(): retrofit2.Response<NetworkCemeteryContainer>
 
     /*
         So the magic now is that you can create suspend methods in your Retrofit interface and directly return your data object.
