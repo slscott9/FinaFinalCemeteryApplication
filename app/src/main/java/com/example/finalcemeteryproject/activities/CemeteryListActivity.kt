@@ -17,6 +17,9 @@ import com.example.finalcemeteryproject.databinding.ActivityCemeteryListBinding
 import com.example.finalcemeteryproject.factories.CemeteryListViewModelFactory
 import com.example.finalcemeteryproject.viewmodels.CemeteryListViewModel
 
+
+//inherits from super class AppCompatActivity()
+
 class CemeteryListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCemeteryListBinding
@@ -36,7 +39,7 @@ class CemeteryListActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
-        cemeteryListViewModel.networkCemeteryListFailure.observe(this, Observer {
+        cemeteryListViewModel.eventNetworkError.observe(this, Observer {
             it?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show() //if getting cemeteries failed we display the error message
             }

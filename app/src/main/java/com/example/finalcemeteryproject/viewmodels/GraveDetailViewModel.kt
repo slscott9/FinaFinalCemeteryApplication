@@ -21,7 +21,7 @@ class GraveDetailViewModel(application: Application, val repository: CemeteryRep
 
 
     private val graveRowId = MutableLiveData<Int>()
-    val graveWithId: LiveData<Grave> = Transformations.switchMap(graveRowId){
+    val graveWithId: LiveData<Grave> = Transformations.switchMap(graveRowId){ //takes rowId and uses it to return the database query from this lambda and set graveWithId member
         rowId -> repository.getGraveWithRowId(rowId)
     }
 
@@ -39,6 +39,11 @@ class GraveDetailViewModel(application: Application, val repository: CemeteryRep
         viewModelScope.launch {
             repository.deleteGrave(rowId)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 
 

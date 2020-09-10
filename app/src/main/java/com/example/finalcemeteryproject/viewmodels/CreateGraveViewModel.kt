@@ -23,6 +23,7 @@ class CreateGraveViewModel(application: Application, val repository: CemeteryRep
         repository.getGraveWithRowId(it)
     }
 
+
     fun setRowId(rowId: Int){
         _rowId.value = rowId
     }
@@ -31,5 +32,16 @@ class CreateGraveViewModel(application: Application, val repository: CemeteryRep
         viewModelScope.launch {
             repository.insertGrave(grave)
         }
+    }
+
+//    fun sendGraveToNetwork(grave: Grave){
+//        repository.sendGraveToNetwork(grave){
+//
+//        }
+//    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

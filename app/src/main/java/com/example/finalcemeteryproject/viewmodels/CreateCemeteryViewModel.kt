@@ -27,13 +27,13 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
              }
          }
 
-    fun sendNeCemeteryToNetwork(cemetery: Cemetery){
-        viewModelScope.launch {
-            repository.newWaySendCemeteryToNetwork(cemetery){
-                _responseFailure.value = it == null
-            }
-        }
-    }
+//    fun sendNeCemeteryToNetwork(cemetery: Cemetery){
+//        viewModelScope.launch {
+//            repository.newWaySendCemeteryToNetwork(cemetery){
+//                _responseFailure.value = it == null
+//            }
+//        }
+//    }
 
     private val _responseFailure = MutableLiveData<Boolean>()
     val responseFailure: LiveData<String> = Transformations.map(_responseFailure){
@@ -46,6 +46,11 @@ class CreateCemeteryViewModel(application: Application, val repository: Cemetery
             newCemeteryKey += 1
             repository.insertCemetery(cemetery)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 
 

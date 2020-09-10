@@ -1,6 +1,7 @@
 package com.example.finalcemeteryproject.network
 
 import com.example.finalcemeteryproject.data.Cemetery
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -38,3 +39,11 @@ fun NetworkCemeteryContainer.asDatabaseModel(): Array<Cemetery> {
         )
     }.toTypedArray()
 }
+
+//@JsonClass(generateAdapter = true)
+//data class NetworkGraveContainer(val graveNetworkList: List<NetworkGrave>)
+//
+//@JsonClass(generateAdapter = true)
+//data class NetworkGrave(
+//
+//)

@@ -129,7 +129,6 @@ class CreateCemeteryActivity : AppCompatActivity() {
                 Log.i("CreateCemeteryViewModel", "The cemeteryKey incremented is ${createCemeteryViewModel.newCemeteryKey}")
 
                 createCemeteryViewModel.insertNewCemetery(cemetery)
-                createCemeteryViewModel.sendNeCemeteryToNetwork(cemetery)
                 finish()
             }
         }
