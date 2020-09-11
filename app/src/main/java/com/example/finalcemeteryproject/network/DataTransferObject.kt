@@ -40,6 +40,8 @@ fun NetworkCemeteryContainer.asDatabaseModel(): Array<Cemetery> {
     }.toTypedArray()
 }
 
+
+
 //@JsonClass(generateAdapter = true)
 //data class NetworkGraveContainer(val graveNetworkList: List<NetworkGrave>)
 //

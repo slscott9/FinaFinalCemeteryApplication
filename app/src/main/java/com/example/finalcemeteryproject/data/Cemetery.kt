@@ -3,6 +3,7 @@ package com.example.finalcemeteryproject.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.finalcemeteryproject.network.NetworkCemeteryContainer
 
 
 @Entity(tableName = "final_cemetery_table")
@@ -35,6 +36,8 @@ data class Cemetery(
 )
 
 
+
+
 @Entity(tableName = "final_graves_table")
 data class Grave(
 
@@ -57,3 +60,4 @@ data class Grave(
 
     val graveNumber: String
 )
+

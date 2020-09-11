@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.finalcemeteryproject.network.*
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,6 +15,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.lang.Exception
 
@@ -22,6 +27,10 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
 
     val networkCemeteryListResponse = MutableLiveData<Boolean>()
     val networkSendCemeteryResponse = MutableLiveData<Boolean>()
+
+    val tag = "Repository"
+
+
 
 
 
@@ -42,11 +51,11 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
                         networkCemeteryListResponse.value = false
                     }
                 }
-            }catch (e: HttpException){
-                Log.i("RefreshCems", e.message())
+            }catch (e: HttpException) {
+                Timber.i(e.message())
 
-            }catch (eT: Throwable){
-                Log.i("RefreshCems", "No network failure something else")
+            }catch (eT: Throwable) {
+                Timber.e("No network failure something else")
             }
         }
     }
@@ -59,10 +68,20 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
 
      */
     suspend fun sendCemeteryToNetwork(cemetery: List<Cemetery>){
+
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+        val type = Types.newParameterizedType(List::class.java, Cemetery::class.java)
+        val adapter = moshi.adapter<List<Cemetery>>(type)
+        val cems = adapter.toJson(cemetery) //converts list of cemetery objects to a json string
+        Timber.i(cems)
+
         withContext(Dispatchers.IO){
             try {
-                val sendCemeteryResponse = networkEntryPoint.sendNewCemeteryToNetwork(cemetery)
-                Log.i("response code" , "${sendCemeteryResponse.code()}")
+                val sendCemeteryResponse = networkEntryPoint.sendNewCemeteryToNetwork(cems)
+                Timber.i(sendCemeteryResponse.code().toString())
                 if(sendCemeteryResponse.isSuccessful){
                     withContext(Dispatchers.Main){
                         networkSendCemeteryResponse.value = true
@@ -72,11 +91,11 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
                         networkSendCemeteryResponse.value = false
                     }
                 }
-            }catch (e: HttpException){
-                Log.i("SendCem", e.message())
+            }catch (e: HttpException) {
+                Timber.i(e.message())
 
             }catch (eT: Throwable){
-                Log.i("Send Cem", "${eT.message}")
+                Timber.i( "$eT")
             }
         }
     }
@@ -86,17 +105,6 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
             cemeteryDao.getAllCemsForNetwork()
         }
     }
-
-
-
-//called from CemeteryListViewModel this method is main safe, launch from a coroutine
-//    suspend fun refreshCemeteryList(){
-//       withContext(Dispatchers.IO){
-//           val cemeteryNetworkList = networkEntryPoint.getCemeteriesFromNetworkNewWay()
-//           cemeteryDao.insertCemeteryNetworkList(*cemeteryNetworkList.asDatabaseModel())
-//       }
-//    }
-
 
     fun getAllCemeteries() : LiveData<List<Cemetery>> {
         return cemeteryDao.getAllCemeteries()
