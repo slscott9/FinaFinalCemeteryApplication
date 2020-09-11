@@ -39,7 +39,7 @@ class CemeteryApplication: Application() { //run doWork for specified Periodic w
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(RefreshDataWorker.WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, repeatingRequest)
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(RefreshDataWorker.WORK_NAME, ExistingPeriodicWorkPolicy.REPLACE, repeatingRequest)
     }
 
     override fun onCreate() {

@@ -34,7 +34,7 @@ interface NetworkApi {
 
     @FormUrlEncoded
     @POST("/cgi-bin/addCem.pl")
-    suspend fun sendNewCemeteryToNetwork(@Body cemetery: Cemetery): retrofit2.Response<Cemetery>
+    suspend fun sendNewCemeteryToNetwork(@Body cemeteryList: List<Cemetery>): retrofit2.Response<Cemetery>
 }
 
 private val moshi = Moshi.Builder() //can use later

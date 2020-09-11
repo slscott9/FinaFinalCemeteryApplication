@@ -33,6 +33,8 @@ class CemeteryListActivity : AppCompatActivity() {
 
         initViewModel()
 
+
+
         cemeteryListAdapter = CemeteryListAdapter(CemeteryListener {
             val intent = Intent(this, CemeteryDetailActivity::class.java)
             intent.putExtra(CemeteryDetailActivity.CEMETERY_ID, it)

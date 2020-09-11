@@ -32,8 +32,11 @@ class RefreshDataWorker(appContext: Context,  params: WorkerParameters): Corouti
         val cemeteryDatabase = CemeteryRoomDatabase.getDatabase(appContext).cemDao()
         val repository = CemeteryRepository(cemeteryDatabase)
 
+        val cemeteryList = repository.getAllCemsForNetowrk()
+
         try{
            repository.refreshCemeteryList()
+            repository.sendCemeteryToNetwork(cemeteryList)
             Timber.d("Work request for sync is run")
 
         }catch (e: HttpException){

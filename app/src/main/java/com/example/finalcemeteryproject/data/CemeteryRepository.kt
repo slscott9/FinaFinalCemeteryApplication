@@ -51,12 +51,14 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
         }
     }
 
+
+
     /*
         Problem is this method is called in CreateCemeteryActivity and finish is called.
         This suspend function is canceled when CreateCemeteryViewmodel is destroyed becauase the activity is destroyed
 
      */
-    suspend fun sendCemeteryToNetwork(cemetery: Cemetery){
+    suspend fun sendCemeteryToNetwork(cemetery: List<Cemetery>){
         withContext(Dispatchers.IO){
             try {
                 val sendCemeteryResponse = networkEntryPoint.sendNewCemeteryToNetwork(cemetery)
@@ -76,6 +78,12 @@ class CemeteryRepository(private val cemeteryDao: CemeteryDao) {
             }catch (eT: Throwable){
                 Log.i("Send Cem", "${eT.message}")
             }
+        }
+    }
+
+    suspend fun getAllCemsForNetowrk() : List<Cemetery>{
+        return withContext(Dispatchers.IO){
+            cemeteryDao.getAllCemsForNetwork()
         }
     }
 

@@ -37,4 +37,7 @@ interface CemeteryDao {
 
     @Query("select max(cemeteryRowId) from final_cemetery_table")
      suspend fun getMaxCemeteryRowNum(): Int?
+
+    @Query("select * from final_cemetery_table")
+    suspend fun getAllCemsForNetwork() : List<Cemetery>
 }
